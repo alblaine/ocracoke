@@ -33,5 +33,40 @@ module Ocracoke
       AnnotationListJob.perform_later options[:image]
     end
 
+    desc 'concatenate ocr text job', 'run concatenate ocr text process'
+    shared_options :image, :resource
+    def concatenate_txt
+      ConcatenateOcrTxtJob.perform_later options[:image], options[:resource]
+    end
+
+    desc 'index ocr job', 'run index process'
+    shared_options :image, :resource
+    def index
+      IndexOcrJob.perform_later options[:image], options[:resource]
+    end
+
+    desc 'notification job', 'run notification process'
+    shared_options :resource
+    def notification
+      NotificationJob.perform_later options[:resource]
+    end
+
+    desc 'pdf creator job', 'run pdf creator process'
+    shared_options :image, :resource
+    def pdf
+      PdfCreatorJob.perform_later options[:image], options[:resource]
+    end
+
+    desc 'resource ocr job', 'run resource ocr process'
+    shared_options :image, :resource
+    def resource_ocr
+      ResourceOcrJob.perform_later options[:image], options[:resource]
+    end
+
+    desc 'word boundaries job', 'run word boundaries process'
+    shared_options :image
+    def word_boundaries
+      WordBoundsJob.perform_later options[:image]
+    end 
   end
 end
