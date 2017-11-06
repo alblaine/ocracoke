@@ -52,9 +52,18 @@ module Ocracoke
     end
 
     desc 'pdf creator job', 'run pdf creator process'
-    shared_options :image, :resource
+    shared_options :resource
     def pdf
-      PdfCreatorJob.perform_later options[:image], options[:resource]
+      @images = []
+      id = options[:resource]
+      @resource = Resource.find_by identifier: id
+      unless @resource.images.nil?
+        @resource.images.each do |image|
+ 	  @images.push(image.identifier)
+        end
+      end 
+      puts @images
+      PdfCreatorJob.perform_later options[:resource], @images
     end
 
     desc 'resource ocr job', 'run resource ocr process'
